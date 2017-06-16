@@ -48,7 +48,6 @@ void ATankPlayerController::AimTowardsCrosshair()
 	{
 		this->GetControlledTank()->AimAt(HitLocation);
 	}
-
 }
 
 bool ATankPlayerController::GetCrosshairTraceHit(FString& ObjectHit, FVector& HitLocation) const

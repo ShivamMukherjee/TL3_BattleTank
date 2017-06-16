@@ -30,12 +30,23 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		OutLaunchVelocity,
 		this->Barrel->GetSocketLocation(FName("Projectile")),
 		HitLocation,
-		LaunchSpeed
+		LaunchSpeed,
+		false,
+		0.f,
+		0.f,
+		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 
 	if (bAimSolutionFound)
 	{
+		float Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: Can fire there! Yay."), Time);
 		this->MoveBarrelTowards(OutLaunchVelocity.Rotation());
+	}
+	else
+	{
+		float Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: Can't fire there."), Time);
 	}
 }
 
