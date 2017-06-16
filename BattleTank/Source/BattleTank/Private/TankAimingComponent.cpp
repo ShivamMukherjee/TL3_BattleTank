@@ -62,5 +62,5 @@ void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 	FRotator BarrelRotation = this->Barrel->GetForwardVector().Rotation();
 	FRotator DeltaRotation = AimRotation - BarrelRotation;
 
-	this->Barrel->Elevate(5); // TODO refactor magic number
+	this->Barrel->Elevate(1); // TODO refactor magic number
 }
