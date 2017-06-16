@@ -2,11 +2,10 @@
 
 #pragma once
 
-#include "TankAimingComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-class UTTankAimingComponent;
+class UTankAimingComponent;
 class UTankBarrel;
 
 UCLASS()
