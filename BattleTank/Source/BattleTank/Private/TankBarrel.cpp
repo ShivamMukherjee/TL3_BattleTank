@@ -5,4 +5,10 @@
 
 
 
+void UTankBarrel::Elevate(float DegreesPerSecond)
+{
+	// move barrel the right amount in this frame
+	UE_LOG(LogTemp, Warning, TEXT("Barrel->Elevate() called. Speed: %f"), DegreesPerSecond);
 
+	// given elevation speed and tick
+}

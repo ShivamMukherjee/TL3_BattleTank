@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "TankBarrel.h"
 #include "TankAimingComponent.h"
 
 
@@ -23,7 +24,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	}
 
 	FVector OutLaunchVelocity;
-	FRotator AimRotation;
 
 	bool bAimSolutionFound = UGameplayStatics::SuggestProjectileVelocity(
 		this,
@@ -35,13 +35,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 	if (bAimSolutionFound)
 	{
-		AimRotation = OutLaunchVelocity.Rotation();
-		UE_LOG(LogTemp, Warning, TEXT("Rotation needed for shot: %s"), *AimRotation.ToString());
+		this->MoveBarrelTowards(OutLaunchVelocity.Rotation());
 	}
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	this->Barrel = BarrelToSet;
 }
@@ -52,6 +51,5 @@ void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 	FRotator BarrelRotation = this->Barrel->GetForwardVector().Rotation();
 	FRotator DeltaRotation = AimRotation - BarrelRotation;
 
-	// move barrel the right amount in this frame
-	// given elevation speed and tick
+	this->Barrel->Elevate(5); // TODO refactor magic number
 }
