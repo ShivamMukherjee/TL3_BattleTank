@@ -17,13 +17,16 @@ public:
 	void Elevate(float DegreesPerSecond);
 	
 private:
+	// degrees/s
 	UPROPERTY(EditAnywhere, Category = Setup)
-	float MaxAngularVelocity = 20.f; // Sensible default: 20 degrees/s
+	float MaxAngularSpeed = 20.f; 
 
+	// degrees
 	UPROPERTY(EditAnywhere, Category = Setup)
-	float MaxElevation = 40.f; // Sensible default: 20 degrees/s
+	float MaxElevation = 40.f;
 
+	// degrees
 	UPROPERTY(EditAnywhere, Category = Setup)
-	float MinElevation = 0.f; // Sensible default: 20 degrees/s
+	float MinElevation = 0.f;
 
 };
