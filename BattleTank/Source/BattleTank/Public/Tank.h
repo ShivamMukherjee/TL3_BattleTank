@@ -5,8 +5,6 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-class UTankAimingComponent;
-class UTankBarrel;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -20,13 +18,14 @@ public:
 	void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* Barrel);
+	void SetBarrelReference(class UTankBarrel* Barrel);
 
-	// TODO add SetTurretReference
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(class UTankTurret* Turret);
 
 
 protected:
-	UTankAimingComponent* TankAimingComponent = nullptr;
+	class UTankAimingComponent* TankAimingComponent = nullptr;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

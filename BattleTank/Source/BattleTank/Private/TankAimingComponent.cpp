@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingComponent.h"
 
 
@@ -18,7 +19,7 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	if (!this->Barrel)
+	if (!this->Barrel || !this->Turret)
 	{
 		return;
 	}
@@ -39,9 +40,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 	if (bAimSolutionFound)
 	{
+		FRotator AimRotation = OutLaunchVelocity.Rotation();
 		float Time = GetWorld()->GetTimeSeconds();
 		UE_LOG(LogTemp, Warning, TEXT("%f: Can fire there! Yay."), Time);
-		this->MoveBarrelTowards(OutLaunchVelocity.Rotation());
+		this->MoveBarrelTowards(AimRotation);
+		this->MoveTurretTowards(AimRotation);
 	}
 	else
 	{
@@ -57,10 +60,25 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 }
 
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	this->Turret = TurretToSet;
+}
+
+
 void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 {
 	FRotator BarrelRotation = this->Barrel->GetForwardVector().Rotation();
 	FRotator DeltaRotation = AimRotation - BarrelRotation;
 
 	this->Barrel->Elevate(DeltaRotation.Pitch);
+}
+
+
+void UTankAimingComponent::MoveTurretTowards(FRotator AimRotation)
+{
+	FRotator TurretRotation = this->Turret->GetForwardVector().Rotation();
+	FRotator DeltaRotation = AimRotation - TurretRotation;
+
+	this->Turret->Rotate(DeltaRotation.Yaw);
 }
