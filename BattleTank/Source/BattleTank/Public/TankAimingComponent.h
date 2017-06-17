@@ -33,6 +33,4 @@ private:
 
 	void MoveBarrelTowards(FRotator AimRotation);
 
-	void MoveTurretTowards(FRotator AimRotation);
-
 };
