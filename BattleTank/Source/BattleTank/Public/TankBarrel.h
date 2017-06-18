@@ -20,7 +20,7 @@ public:
 private:
 	// degrees/s
 	UPROPERTY(EditAnywhere, Category = Setup)
-	float MaxAngularSpeed = 10.f; 
+	float MaxAngularSpeed = 15.f; 
 
 	// degrees
 	UPROPERTY(EditAnywhere, Category = Setup)

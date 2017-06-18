@@ -38,10 +38,16 @@ protected:
 private:
 	// in cm/s
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 10000.f; 
+	float LaunchSpeed = 4000.f; 
+
+	// seconds
+	UPROPERTY(EditAnywhere, Category = Firing)
+	float ReloadTime = 3.f;
+
+	double LastFireTime = 0.0;
 
 	UPROPERTY(EditAnywhere, Category = Setup)
-	TSubclassOf<class AProjectile> ProjectileBlueprint = nullptr; // Alt: TSubclassOf
+	TSubclassOf<class AProjectile> ProjectileBlueprint = nullptr;
 
 	// Local barrel reference for spawning projectile
 	class UTankBarrel* Barrel = nullptr;
