@@ -19,15 +19,15 @@ public:
 	
 private:
 	// degrees/s
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MaxAngularSpeed = 15.f; 
 
 	// degrees
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MaxElevation = 30.f;
 
 	// degrees
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MinElevation = 0.f;
 
 };
