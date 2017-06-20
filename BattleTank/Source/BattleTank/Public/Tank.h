@@ -38,11 +38,11 @@ protected:
 private:
 	// in cm/s
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 4000.f; 
+	float LaunchSpeed = 4000.0; 
 
 	// seconds
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float ReloadTime = 3.f;
+	float ReloadTime = 3.0;
 
 	double LastFireTime = 0.0;
 

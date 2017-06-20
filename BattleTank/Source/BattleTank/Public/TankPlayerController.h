@@ -28,7 +28,7 @@ private:
 	float CrosshairYLocation = 0.3333;
 
 	//UPROPERTY(EditDefaultsOnly)
-	//float LineTraceRange = 1000000.f; // 10km
+	//float LineTraceRange = 1000000.0; // 10km
 
 	ATank* GetControlledTank() const;
 

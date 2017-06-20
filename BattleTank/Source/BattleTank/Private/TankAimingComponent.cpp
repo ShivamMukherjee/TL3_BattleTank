@@ -33,11 +33,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		HitLocation,
 		LaunchSpeed,
 		false,
-		0.f,
-		0.f,
+		0.0,
+		0.0,
 		ESuggestProjVelocityTraceOption::DoNotTrace, // comment out line to reproduce bug
 		FCollisionResponseParams::DefaultResponseParam,
-		TArray<AActor*>{GetOwner()},
+		TArray<AActor*>{this->GetOwner()},
 		false
 	);
 
