@@ -18,7 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 	
-	// TODO kg cm s^-2 / newtons?
+	// Newtons
 	UPROPERTY(EditDefaultsOnly)
 	float MaxDrivingForce = 40.0e6;
 	
