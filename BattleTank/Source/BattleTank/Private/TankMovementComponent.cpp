@@ -6,17 +6,6 @@
 
 
 
-void UTankMovementComponent::IntendMoveForward(float Throw)
-{
-	UE_LOG(LogTemp, Warning, TEXT("%f: intent to move forward detected, throw: %f"),
-		GetWorld()->GetTimeSeconds(),
-		Throw
-	);
-
-	this->LeftTrack->SetThrottle(Throw);
-	this->RightTrack->SetThrottle(Throw);
-}
-
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
 	if (!LeftTrackToSet || !RightTrackToSet)
@@ -26,4 +15,32 @@ void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* 
 
 	this->LeftTrack = LeftTrackToSet;
 	this->RightTrack = RightTrackToSet;
+
+	// TODO prevent superposition of controls
+}
+
+
+void UTankMovementComponent::IntendMoveForward(float Throw)
+{
+	if (!this->LeftTrack || !this->RightTrack)
+	{
+		return;
+	}
+
+	this->LeftTrack->SetThrottle(Throw);
+	this->RightTrack->SetThrottle(Throw);
+}
+
+
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	if (!this->LeftTrack || !this->RightTrack)
+	{
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Intend turn right: %f"), Throw);
+
+	this->LeftTrack->SetThrottle(Throw);
+	this->RightTrack->SetThrottle(-Throw);
 }
