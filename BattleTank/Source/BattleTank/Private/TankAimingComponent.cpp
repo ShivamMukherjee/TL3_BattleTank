@@ -29,7 +29,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	bool bAimSolutionFound = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
-		this->Barrel->GetSocketLocation(FName("Projectile")),
+		this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
 		HitLocation,
 		LaunchSpeed,
 		false,

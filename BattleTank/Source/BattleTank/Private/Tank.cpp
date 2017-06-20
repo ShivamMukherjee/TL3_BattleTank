@@ -4,6 +4,7 @@
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "Tank.h"
 
 
@@ -12,7 +13,10 @@ ATank::ATank()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	this->TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	this->TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName(TEXT("Aiming Component")));
+	
+	// Valid if not added via Blueprint
+	//this->TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName(TEXT("Movement Component")));
 }
 
 // Called when the game starts or when spawned
@@ -57,8 +61,8 @@ void ATank::Fire()
 	{
 		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
-			this->Barrel->GetSocketLocation(FName("Projectile")),
-			this->Barrel->GetSocketRotation(FName("Projectile"))
+			this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
+			this->Barrel->GetSocketRotation(FName(TEXT("Projectile")))
 			);
 
 		Projectile->LaunchProjectile(this->LaunchSpeed);

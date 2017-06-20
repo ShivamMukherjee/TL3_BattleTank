@@ -7,8 +7,6 @@
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f: %s Throttle: %f"), GetWorld()->GetTimeSeconds(), *this->GetName(), Throttle);
-
 	FVector ForceApplied = this->GetForwardVector() * Throttle * this->MaxDrivingForce;
 	FVector ForceLocation = this->GetComponentLocation();
 	UPrimitiveComponent* TankRoot = Cast<UPrimitiveComponent>(this->GetOwner()->GetRootComponent());

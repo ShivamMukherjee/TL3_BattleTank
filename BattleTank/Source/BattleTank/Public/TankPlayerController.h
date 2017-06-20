@@ -5,8 +5,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
-
 /**
  * 
  */
@@ -29,8 +27,6 @@ private:
 
 	//UPROPERTY(EditDefaultsOnly)
 	//float LineTraceRange = 1000000.0; // 10km
-
-	ATank* GetControlledTank() const;
 
 	// start aiming barrel to fire through crosshair in the world
 	void AimTowardsCrosshair();

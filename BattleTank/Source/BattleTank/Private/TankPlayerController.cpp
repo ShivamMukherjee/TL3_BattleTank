@@ -9,16 +9,6 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATank* ControlledTank = this->GetControlledTank();
-
-	if (!ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController not possessing a Tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController has possessed %s"), *ControlledTank->GetName());
-	}
 }
 
 
@@ -29,15 +19,11 @@ void ATankPlayerController::Tick(float DeltaTime)
 }
 
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!this->GetControlledTank())
+	ATank* ControlledTank = Cast<ATank>(this->GetPawn());
+
+	if (!ControlledTank)
 	{
 		return;
 	}
@@ -47,7 +33,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 	if (GetCrosshairTraceHit(ObjectHit, HitLocation))
 	{
-		this->GetControlledTank()->AimAt(HitLocation);
+		ControlledTank->AimAt(HitLocation);
 	}
 }
 
