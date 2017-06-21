@@ -44,9 +44,9 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 }
 
 
-void UTankMovementComponent::RequestDirectMove(const FVector& OutMoveVelocity, bool bForceMaxSpeed)
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	FVector AIForwardIntention = OutMoveVelocity.GetSafeNormal();
+	FVector AIForwardIntention = MoveVelocity.GetSafeNormal();
 	FVector TankForward = this->GetOwner()->GetActorForwardVector().GetSafeNormal();
 
 	// dot product of unit vectors is the cosine of the angle between them
@@ -56,6 +56,4 @@ void UTankMovementComponent::RequestDirectMove(const FVector& OutMoveVelocity, b
 	// cross product for the sine of said angle
 	float RightThrow = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
 	this->IntendTurnRight(RightThrow);
-
-	UE_LOG(LogTemp, Warning, TEXT("Forward: %f, Right: %f"), ForwardThrow, RightThrow);
 }

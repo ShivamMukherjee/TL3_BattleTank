@@ -18,6 +18,10 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	UFUNCTION(BlueprintCallable)
+	ATank* GetControlledTank();
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5;
