@@ -19,7 +19,7 @@ public:
 
 private:
 	// degrees/s
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float MaxAngularSpeed = 20.0;
 	
 };

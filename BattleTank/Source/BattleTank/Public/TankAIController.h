@@ -21,5 +21,5 @@ private:
 	virtual void Tick(float DeltaTime) override;
 
 	// distance of approach of AI tank till it opens fire on  player
-	float AcceptanceRadius = 30e2;
+	float AcceptanceRadius = 3000.0;
 };
