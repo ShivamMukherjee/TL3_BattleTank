@@ -5,6 +5,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+class UTankBarrel;
+class UTankTurret;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -21,10 +23,7 @@ public:
 	void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetBarrelReference(class UTankBarrel* Barrel);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetTurretReference(class UTankTurret* Turret);
+	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
@@ -54,6 +53,6 @@ private:
 	TSubclassOf<class AProjectile> ProjectileBlueprint = nullptr;
 
 	// Local barrel reference for spawning projectile
-	class UTankBarrel* Barrel = nullptr;
+	UTankBarrel* Barrel = nullptr; // TODO remove
 	
 };

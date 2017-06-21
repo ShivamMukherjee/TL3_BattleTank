@@ -13,9 +13,9 @@ ATank::ATank()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	this->TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName(TEXT("Aiming Component")));
 	
 	// Valid if not added via Blueprint
+	//this->TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName(TEXT("Aiming Component")));
 	//this->TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName(TEXT("Movement Component")));
 }
 
@@ -40,16 +40,9 @@ void ATank::AimAt(FVector HitLocation)
 }
 
 
-void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
+void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	this->TankAimingComponent->SetBarrelReference(BarrelToSet);
-	this->Barrel = BarrelToSet;
-}
-
-
-void ATank::SetTurretReference(UTankTurret* Turret)
-{
-	this->TankAimingComponent->SetTurretReference(Turret);
+	this->TankAimingComponent->Initialise(BarrelToSet, TurretToSet);
 }
 
 
@@ -63,7 +56,7 @@ void ATank::Fire()
 			ProjectileBlueprint,
 			this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
 			this->Barrel->GetSocketRotation(FName(TEXT("Projectile")))
-			);
+		);
 
 		Projectile->LaunchProjectile(this->LaunchSpeed);
 		this->LastFireTime = FPlatformTime::Seconds();
