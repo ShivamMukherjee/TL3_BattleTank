@@ -23,10 +23,9 @@ void ATankAIController::Tick(float DeltaTime)
 	}
 
 	// TODO move towards player
+	this->MoveToActor(PlayerTank, this->AcceptanceRadius);
 
-	// aim towards player
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());
 
-	// TODO fire at player
 	ControlledTank->Fire();
 }
