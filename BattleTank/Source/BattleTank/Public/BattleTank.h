@@ -4,3 +4,9 @@
 
 #include "Engine.h"
 
+
+DECLARE_LOG_CATEGORY_EXTERN(BTInfoLog, Log, All);
+
+DECLARE_LOG_CATEGORY_EXTERN(BTBeginPlayLog, Log, All);
+
+DECLARE_LOG_CATEGORY_EXTERN(BTCtorLog, Log, All);

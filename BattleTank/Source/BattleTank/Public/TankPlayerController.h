@@ -6,7 +6,7 @@
 #include "TankPlayerController.generated.h"
 
 /**
- * 
+ * Aids in finding the aim.
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -19,8 +19,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UFUNCTION(BlueprintCallable)
-	ATank* GetControlledTank();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimingComponentReference);
 
 private:
 	UPROPERTY(EditDefaultsOnly)

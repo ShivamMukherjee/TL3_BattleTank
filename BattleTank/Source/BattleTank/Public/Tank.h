@@ -8,6 +8,9 @@
 class UTankBarrel;
 class UTankTurret;
 
+/**
+ * Represents the Tank in the game
+ */
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {

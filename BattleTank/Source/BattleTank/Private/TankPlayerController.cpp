@@ -2,13 +2,23 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	UTankAimingComponent* AimingComponent = Cast<ATank>(this->GetPawn())->FindComponentByClass<UTankAimingComponent>();
 
+	if (ensure(AimingComponent))
+	{
+		FoundAimingComponent(AimingComponent);
+	}
+	else
+	{
+		UE_LOG(BTBeginPlayLog, Warning, TEXT("No Aiming Component found on PlayerController."));
+	}
 }
 
 
@@ -19,17 +29,11 @@ void ATankPlayerController::Tick(float DeltaTime)
 }
 
 
-ATank* ATankPlayerController::GetControlledTank()
-{
-	return Cast<ATank>(this->GetPawn());
-}
-
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
 	ATank* ControlledTank = Cast<ATank>(this->GetPawn());
 
-	if (!ControlledTank)
+	if (!ensure(ControlledTank))
 	{
 		return;
 	}
