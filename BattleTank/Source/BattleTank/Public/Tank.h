@@ -32,11 +32,12 @@ public:
 	void Fire();
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	class UTankAimingComponent* TankAimingComponent = nullptr;
+	
+	//UPROPERTY(BlueprintReadOnly)
+	//class UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UPROPERTY(BlueprintReadOnly)
-	class UTankMovementComponent* TankMovementComponent = nullptr;
+	//UPROPERTY(BlueprintReadOnly)
+	//class UTankMovementComponent* TankMovementComponent = nullptr;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
