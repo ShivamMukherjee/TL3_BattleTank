@@ -23,21 +23,17 @@ protected:
 	void FoundAimingComponent(UTankAimingComponent* AimingComponentReference);
 
 private:
+	UPROPERTY(BlueprintSpawnableComponent, Category = "Setup")
+	class UTankAimingComponent* AimingComponent = nullptr;
+
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5;
 
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairYLocation = 0.3333;
 
-	//UPROPERTY(EditDefaultsOnly)
-	//float LineTraceRange = 1000000.0; // 10km
-
 	// start aiming barrel to fire through crosshair in the world
 	void AimTowardsCrosshair();
 
-	bool GetCrosshairTraceHit(FString& ObjectHit, FVector& HitLocation) const;
-
-	//bool GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const;
-
-	//bool GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const;
+	bool GetCrosshairTraceHit(FVector& HitLocation) const;
 };

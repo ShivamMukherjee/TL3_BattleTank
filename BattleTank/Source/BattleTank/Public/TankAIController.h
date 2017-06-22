@@ -16,10 +16,14 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 private:
+	UPROPERTY(BlueprintSpawnableComponent, Category = "Setup")
+	class UTankAimingComponent* AimingComponent = nullptr;
+
+	// distance of approach of AI tank till it opens fire on  player
+	float AcceptanceRadius = 3000.0;
+	
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
-	// distance of approach of AI tank till it opens fire on  player
-	float AcceptanceRadius = 3000.0;
 };

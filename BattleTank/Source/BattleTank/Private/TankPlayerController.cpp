@@ -9,15 +9,15 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	UTankAimingComponent* AimingComponent = Cast<ATank>(this->GetPawn())->FindComponentByClass<UTankAimingComponent>();
+	this->AimingComponent = Cast<ATank>(this->GetPawn())->FindComponentByClass<UTankAimingComponent>();
 
-	if (ensure(AimingComponent))
+	if (ensure(this->AimingComponent))
 	{
-		FoundAimingComponent(AimingComponent);
+		FoundAimingComponent(this->AimingComponent);
 	}
 	else
 	{
-		UE_LOG(BTBeginPlayLog, Warning, TEXT("No Aiming Component found on PlayerController."));
+		return;
 	}
 }
 
@@ -31,23 +31,16 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	ATank* ControlledTank = Cast<ATank>(this->GetPawn());
-
-	if (!ensure(ControlledTank))
-	{
-		return;
-	}
-
 	FVector HitLocation = FVector(0);
-	FString ObjectHit = "Nothing";
 
-	if (GetCrosshairTraceHit(ObjectHit, HitLocation))
+	if (GetCrosshairTraceHit(HitLocation))
 	{
-		ControlledTank->AimAt(HitLocation);
+		this->AimingComponent->AimAt(HitLocation);
 	}
 }
 
-bool ATankPlayerController::GetCrosshairTraceHit(FString& ObjectHit, FVector& HitLocation) const
+
+bool ATankPlayerController::GetCrosshairTraceHit(FVector& HitLocation) const
 {
 	// Viewport Size
 	int32 ViewportSizeX, ViewportSizeY;
@@ -62,7 +55,6 @@ bool ATankPlayerController::GetCrosshairTraceHit(FString& ObjectHit, FVector& Hi
 	if (bHit)
 	{
 		HitLocation = HitResult.ImpactPoint;
-		ObjectHit = HitResult.GetActor()->GetName();
 	}
 
 	// Draws a red line for debugging purposes
@@ -70,50 +62,3 @@ bool ATankPlayerController::GetCrosshairTraceHit(FString& ObjectHit, FVector& Hi
 
 	return bHit;
 }
-
-
-//bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
-//{
-//	// Find crosshair position by de-projecting from screen pixels
-//	int32 ViewportSizeX, ViewportSizeY;
-//	GetViewportSize(ViewportSizeX, ViewportSizeY);
-//
-//	FVector2D ScreenLocation(ViewportSizeX * this->CrosshairXLocation, ViewportSizeY * this->CrosshairYLocation);
-//	FVector OutLookDirection;
-//
-//	if (this->GetLookDirection(ScreenLocation, OutLookDirection))
-//	{
-//		// line trace along LookDirection
-//		return this->GetLookVectorHitLocation(OutLookDirection, OutHitLocation);
-//	}
-//
-//	OutHitLocation = FVector(0);
-//	return false;
-//}
-//
-//
-//bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
-//{
-//	FVector OutCameraWorldLocation;
-//	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, OutCameraWorldLocation, OutLookDirection);
-//}
-//
-//
-//bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const
-//{
-//	FHitResult Hit;
-//	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
-//
-//	if (GetWorld()->LineTraceSingleByChannel(
-//		Hit,
-//		StartLocation,
-//		StartLocation + LookDirection * this->LineTraceRange,
-//		ECollisionChannel::ECC_Visibility
-//	))
-//	{
-//		OutHitLocation = Hit.Location;
-//		return true;
-//	}
-//	
-//	return false;
-//}

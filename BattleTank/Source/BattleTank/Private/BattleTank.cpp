@@ -6,7 +6,3 @@ IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, BattleTank, "BattleTank" 
 
 
 DEFINE_LOG_CATEGORY(BTInfoLog);
-
-DEFINE_LOG_CATEGORY(BTBeginPlayLog);
-
-DEFINE_LOG_CATEGORY(BTCtorLog);
