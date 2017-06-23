@@ -23,7 +23,6 @@ protected:
 	void FoundAimingComponent(UTankAimingComponent* AimingComponentReference);
 
 private:
-	UPROPERTY(BlueprintSpawnableComponent, Category = "Setup")
 	class UTankAimingComponent* AimingComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)

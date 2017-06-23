@@ -3,6 +3,7 @@
 #include "BattleTank.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 
@@ -11,7 +12,14 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	UE_LOG(BTInfoLog, Warning, TEXT(__FUNCSIG__));
 }
 
 
@@ -65,8 +73,6 @@ void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 		return;
 	}
 
-	UE_LOG(BTInfoLog, Warning, TEXT("%s exec"), TEXT(__FUNCSIG__));
-
 	FRotator BarrelRotation = this->Barrel->GetForwardVector().Rotation();
 	FRotator DeltaRotation = AimRotation - BarrelRotation;
 
@@ -86,13 +92,14 @@ void UTankAimingComponent::Fire()
 
 	if (bIsReloaded)
 	{
-		AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
+		this
+		->GetWorld()
+		->SpawnActor<AProjectile>(
+			this->ProjectileBlueprint,
 			this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
-			this->Barrel->GetSocketRotation(FName(TEXT("Projectile")))
-			);
+			this->Barrel->GetSocketRotation(FName(TEXT("Projectile"))))
+		->LaunchProjectile(this->LaunchSpeed);
 
-		Projectile->LaunchProjectile(this->LaunchSpeed);
 		this->LastFireTime = FPlatformTime::Seconds();
 	}
 }

@@ -2,7 +2,6 @@
 
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
-#include "Tank.h"
 #include "TankAIController.h"
 
 
@@ -10,15 +9,20 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	this->AimingComponent = Cast<ATank>(this->GetPawn())->FindComponentByClass<UTankAimingComponent>();
+	this->AimingComponent = this->GetPawn()->FindComponentByClass<UTankAimingComponent>();
+
+	if (!ensure(this->AimingComponent))
+	{
+		return;
+	}
 }
 
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	ATank* PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	APawn* PlayerTank = this->GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if (!ensure(PlayerTank))
+	if (!ensure(PlayerTank && this->GetPawn()))
 	{
 		return;
 	}
