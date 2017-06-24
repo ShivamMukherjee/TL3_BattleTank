@@ -15,42 +15,10 @@ UTankAimingComponent::UTankAimingComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+
+void UTankAimingComponent::BeginPlay()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	UE_LOG(BTInfoLog, Warning, TEXT(__FUNCSIG__));
-}
-
-
-void UTankAimingComponent::AimAt(FVector HitLocation)
-{
-	if (!ensure(this->Barrel && this->Turret))
-	{
-		return;
-	}
-
-	FVector OutLaunchVelocity;
-
-	bool bAimSolutionFound = UGameplayStatics::SuggestProjectileVelocity(
-		this,
-		OutLaunchVelocity,
-		this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
-		HitLocation,
-		this->LaunchSpeed,
-		false,
-		0.0,
-		0.0,
-		ESuggestProjVelocityTraceOption::DoNotTrace, // comment out line to reproduce bug
-		FCollisionResponseParams::DefaultResponseParam,
-		TArray<AActor*>{this->GetOwner()},
-		false
-	);
-
-	if (bAimSolutionFound)
-	{
-		this->MoveBarrelTowards(OutLaunchVelocity.Rotation());
-	}
+	this->LastFireTime = FPlatformTime::Seconds();
 }
 
 
@@ -65,6 +33,79 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	this->Turret = TurretToSet;
 }
 
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if ((FPlatformTime::Seconds() - this->LastFireTime) < this->ReloadTime)
+	{
+		this->FiringState = EFiringState::Reloading;
+		
+	}
+	else
+	{
+		if (this->IsBarrelMoving())
+		{
+			this->FiringState = EFiringState::Aiming;
+		}
+		
+		UPrimitiveComponent* HitComponent = this->HitResult.GetComponent();
+
+		if (!HitComponent)
+		{
+			return;
+		}
+
+		UClass* HitObjectClass = HitComponent->GetClass();
+		UClass* ThisClass = this->GetOwner()->GetRootComponent()->GetClass();
+
+		if (HitObjectClass == ThisClass)
+		{
+			this->FiringState = EFiringState::Locked;
+		}
+	}
+}
+
+
+void UTankAimingComponent::AimAt(FVector HitLocation)
+{
+	if (!ensure(this->Barrel && this->Turret))
+	{
+		return;
+	}
+
+	bool bAimSolutionFound = UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		this->LaunchVelocity,
+		this->Barrel->GetSocketLocation(FName(TEXT("Projectile"))),
+		HitLocation,
+		this->LaunchSpeed,
+		false,
+		0.0,
+		0.0,
+		ESuggestProjVelocityTraceOption::DoNotTrace, // comment out line to reproduce bug
+		FCollisionResponseParams::DefaultResponseParam,
+		TArray<AActor*>{this->GetOwner()},
+		false
+	);
+
+	if (bAimSolutionFound)
+	{
+		this->MoveBarrelTowards(this->LaunchVelocity.Rotation());
+	}
+}
+
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(this->Barrel))
+	{
+		return false;
+	}
+
+	return !this->Barrel->GetForwardVector().Equals(this->LaunchVelocity, 0.01);
+}
 
 void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 {
@@ -83,15 +124,13 @@ void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(this->Barrel))
+	if (this->FiringState != EFiringState::Reloading)
 	{
-		return;
-	}
+		if (!ensure(this->Barrel && this->ProjectileBlueprint))
+		{
+			return;
+		}
 
-	bool bIsReloaded = (FPlatformTime::Seconds() - this->LastFireTime) > this->ReloadTime;
-
-	if (bIsReloaded)
-	{
 		this
 		->GetWorld()
 		->SpawnActor<AProjectile>(

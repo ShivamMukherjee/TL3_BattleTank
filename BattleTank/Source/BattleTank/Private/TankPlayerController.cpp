@@ -35,34 +35,26 @@ void ATankPlayerController::AimTowardsCrosshair()
 		return;
 	}
 
-	FVector HitLocation = FVector(0);
+	FHitResult OutHit;
 
-	if (GetCrosshairTraceHit(HitLocation))
+	if (GetCrosshairTraceHit(OutHit))
 	{
-		this->AimingComponent->AimAt(HitLocation);
+		this->AimingComponent->AimAt(OutHit.ImpactPoint);
+		this->AimingComponent->SetHitResult(OutHit);
 	}
 }
 
 
-bool ATankPlayerController::GetCrosshairTraceHit(FVector& HitLocation) const
+bool ATankPlayerController::GetCrosshairTraceHit(FHitResult& Hit) const
 {
 	// Viewport Size
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
-	bool bHit;
 	FVector2D CrosshairPosition = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
-	FHitResult HitResult;
 
-	bHit = GetHitResultAtScreenPosition(CrosshairPosition, ECollisionChannel::ECC_WorldStatic, false, HitResult);
-
-	if (bHit)
-	{
-		HitLocation = HitResult.ImpactPoint;
-	}
+	return GetHitResultAtScreenPosition(CrosshairPosition, ECollisionChannel::ECC_WorldStatic, false, Hit);
 
 	// Draws a red line for debugging purposes
 	//DrawDebugLine(GetWorld(), HitResult.TraceStart, HitResult.TraceEnd, FColor(30, 40, 50));
-
-	return bHit;
 }

@@ -34,5 +34,5 @@ private:
 	// start aiming barrel to fire through crosshair in the world
 	void AimTowardsCrosshair();
 
-	bool GetCrosshairTraceHit(FVector& HitLocation) const;
+	bool GetCrosshairTraceHit(FHitResult& Hit) const;
 };

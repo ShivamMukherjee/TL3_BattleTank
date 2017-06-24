@@ -28,6 +28,8 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+	virtual void BeginPlay() override;
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
@@ -38,14 +40,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	FORCEINLINE void SetHitResult(FHitResult Hit) { this->HitResult = Hit; }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState FiringState = EFiringState::Aiming;
+	EFiringState FiringState = EFiringState::Reloading;
 
 private:
 	UTankBarrel* Barrel = nullptr;
 
 	UTankTurret* Turret = nullptr;
+
+	FVector LaunchVelocity;
+
+	FHitResult HitResult;
 
 	// cm/s
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -59,6 +67,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<class AProjectile> ProjectileBlueprint = nullptr;
+
+	bool IsBarrelMoving();
 
 	void MoveBarrelTowards(FRotator AimRotation);
 
