@@ -19,7 +19,8 @@ private:
 	class UTankAimingComponent* AimingComponent = nullptr;
 
 	// distance of approach of AI tank till it opens fire on  player
-	float AcceptanceRadius = 3000.0;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float AcceptanceRadius = 8000.0;
 	
 	virtual void BeginPlay() override;
 

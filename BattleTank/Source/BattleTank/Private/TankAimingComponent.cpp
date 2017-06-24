@@ -38,29 +38,21 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if ((FPlatformTime::Seconds() - this->LastFireTime) < this->ReloadTime)
+	if (this->RoundsLeft <= 0)
+	{
+		this->FiringState = EFiringState::NoAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - this->LastFireTime) < this->ReloadTime)
 	{
 		this->FiringState = EFiringState::Reloading;
-		
 	}
-	else
+	else 
 	{
 		if (this->IsBarrelMoving())
 		{
 			this->FiringState = EFiringState::Aiming;
 		}
-		
-		UPrimitiveComponent* HitComponent = this->HitResult.GetComponent();
-
-		if (!HitComponent)
-		{
-			return;
-		}
-
-		UClass* HitObjectClass = HitComponent->GetClass();
-		UClass* ThisClass = this->GetOwner()->GetRootComponent()->GetClass();
-
-		if (HitObjectClass == ThisClass)
+		else
 		{
 			this->FiringState = EFiringState::Locked;
 		}
@@ -104,7 +96,7 @@ bool UTankAimingComponent::IsBarrelMoving()
 		return false;
 	}
 
-	return !this->Barrel->GetForwardVector().Equals(this->LaunchVelocity, 0.01);
+	return !this->Barrel->GetForwardVector().Equals(this->LaunchVelocity.GetSafeNormal(), 0.01);
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
@@ -118,13 +110,13 @@ void UTankAimingComponent::MoveBarrelTowards(FRotator AimRotation)
 	FRotator DeltaRotation = AimRotation - BarrelRotation;
 
 	this->Barrel->Elevate(DeltaRotation.Pitch);
-	this->Turret->Rotate(DeltaRotation.Yaw);
+	this->Turret->Rotate(FMath::Abs(DeltaRotation.Yaw) < 180 ? DeltaRotation.Yaw : 180 - DeltaRotation.Yaw);
 }
 
 
 void UTankAimingComponent::Fire()
 {
-	if (this->FiringState != EFiringState::Reloading)
+	if (this->FiringState == EFiringState::Locked || this->FiringState == EFiringState::Aiming)
 	{
 		if (!ensure(this->Barrel && this->ProjectileBlueprint))
 		{
@@ -140,5 +132,6 @@ void UTankAimingComponent::Fire()
 		->LaunchProjectile(this->LaunchSpeed);
 
 		this->LastFireTime = FPlatformTime::Seconds();
+		this->RoundsLeft--;
 	}
 }

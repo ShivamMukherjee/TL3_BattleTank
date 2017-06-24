@@ -23,12 +23,16 @@ public:
 	// sets a throttle between -1 and +1
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetThrottle(float Throttle);
+
+	void DriveTrack();
 	
 	// Newtons
 	UPROPERTY(EditDefaultsOnly)
 	float MaxDrivingForce = 40.0e6;
 
 private:
+	float CurrentThrottle = 0.0;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult);
 };
