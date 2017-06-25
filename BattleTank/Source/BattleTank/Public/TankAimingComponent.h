@@ -45,12 +45,12 @@ public:
 
 	FORCEINLINE EFiringState GetFiringState() const { return this->FiringState; }
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	FORCEINLINE int32 GetRoundsLeft() const { return this->RoundsLeft; }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Firing")
-	int32 RoundsLeft = 3;
 
 private:
 	UTankBarrel* Barrel = nullptr;
@@ -68,6 +68,9 @@ private:
 	// seconds
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3.0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RoundsLeft = 3;
 
 	double LastFireTime = 0.0;
 
