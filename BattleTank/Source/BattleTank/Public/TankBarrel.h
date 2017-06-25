@@ -24,7 +24,7 @@ private:
 
 	// degrees
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float MaxElevation = 30.0;
+	float MaxElevation = 40.0;
 
 	// degrees
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
