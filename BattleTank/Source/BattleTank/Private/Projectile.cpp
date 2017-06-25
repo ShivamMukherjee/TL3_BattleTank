@@ -8,16 +8,20 @@
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	this->ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
-	this->CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
-	this->LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+	PrimaryActorTick.bCanEverTick = false;
+
+	this->ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName(TEXT("Projectile Movement")));
+	this->CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(TEXT("Collision Mesh")));
+	this->LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName(TEXT("Launch Blast")));
+	this->ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName(TEXT("Impact Blast")));
 
 	this->SetRootComponent(this->CollisionMesh);
 	this->CollisionMesh->SetNotifyRigidBodyCollision(true);
 	this->CollisionMesh->SetVisibility(false);
 
-	this->LaunchBlast->AttachTo(this->RootComponent);
+	this->LaunchBlast->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	this->ImpactBlast->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	this->ImpactBlast->bAutoActivate = false;
 
 	if (!ensure(this->ProjectileMovement))
 	{
@@ -34,12 +38,6 @@ void AProjectile::BeginPlay()
 	
 }
 
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 void AProjectile::LaunchProjectile(float LaunchSpeed)
 {

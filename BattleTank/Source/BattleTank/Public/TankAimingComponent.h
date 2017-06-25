@@ -63,7 +63,7 @@ private:
 
 	// cm/s
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 4000.0;
+	float LaunchSpeed = 100.0e2;
 
 	// seconds
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
