@@ -31,4 +31,19 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DestroyDelay = 30.0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float Damage = 30.0;
+
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult);
+
+	void TriggerDestroy();
 };

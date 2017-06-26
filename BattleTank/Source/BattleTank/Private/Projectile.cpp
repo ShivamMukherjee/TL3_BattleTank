@@ -14,6 +14,7 @@ AProjectile::AProjectile()
 	this->CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(TEXT("Collision Mesh")));
 	this->LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName(TEXT("Launch Blast")));
 	this->ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName(TEXT("Impact Blast")));
+	this->ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName(TEXT("Explosion Force")));
 
 	this->SetRootComponent(this->CollisionMesh);
 	this->CollisionMesh->SetNotifyRigidBodyCollision(true);
@@ -21,6 +22,8 @@ AProjectile::AProjectile()
 
 	this->LaunchBlast->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	this->ImpactBlast->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	this->ExplosionForce->AttachToComponent(this->RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 	this->ImpactBlast->bAutoActivate = false;
 
 	if (!ensure(this->ProjectileMovement))
@@ -36,6 +39,7 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	this->CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 
@@ -43,4 +47,32 @@ void AProjectile::LaunchProjectile(float LaunchSpeed)
 {
 	this->ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
 	this->ProjectileMovement->Activate();
+}
+
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult)
+{
+	this->LaunchBlast->Deactivate();
+	this->ImpactBlast->Activate();
+	this->ExplosionForce->FireImpulse();
+	this->SetRootComponent(this->ImpactBlast);
+	this->CollisionMesh->DestroyComponent();
+
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		this->Damage,
+		this->GetActorLocation(),
+		this->ExplosionForce->Radius,
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // no actors ignored
+	);
+
+	FTimerHandle TimerHandle;
+	this->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::TriggerDestroy, this->DestroyDelay, false);
+}
+
+
+void AProjectile::TriggerDestroy()
+{
+	this->Destroy();
 }

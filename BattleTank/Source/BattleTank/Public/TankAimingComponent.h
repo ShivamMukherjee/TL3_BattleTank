@@ -63,14 +63,14 @@ private:
 
 	// cm/s
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 100.0e2;
+	float LaunchSpeed = 40.0e2;
 
 	// seconds
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3.0;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	int32 RoundsLeft = 3;
+	int32 RoundsLeft = 20;
 
 	double LastFireTime = 0.0;
 

@@ -20,7 +20,7 @@ private:
 
 	// distance of approach of AI tank till it opens fire on  player
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float AcceptanceRadius = 8000.0;
+	float AcceptanceRadius = 80.0e2;
 	
 	virtual void BeginPlay() override;
 
