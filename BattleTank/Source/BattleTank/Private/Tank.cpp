@@ -14,7 +14,9 @@ ATank::ATank()
 
 void ATank::BeginPlay()
 {
+	// THE MOST IMPORTANT LINE IN THE ENTIRE GAME
 	Super::BeginPlay();
+
 	this->CurrentHealth = this->StartingHealth;
 }
 

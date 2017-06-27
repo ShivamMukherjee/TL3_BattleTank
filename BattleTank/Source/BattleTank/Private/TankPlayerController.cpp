@@ -54,7 +54,7 @@ bool ATankPlayerController::GetCrosshairTraceHit(FHitResult& Hit) const
 
 	FVector2D CrosshairPosition = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
-	return GetHitResultAtScreenPosition(CrosshairPosition, ECollisionChannel::ECC_WorldStatic, false, Hit);
+	return GetHitResultAtScreenPosition(CrosshairPosition, ECollisionChannel::ECC_Camera, false, Hit);
 
 	// Draws a red line for debugging purposes
 	//DrawDebugLine(GetWorld(), HitResult.TraceStart, HitResult.TraceEnd, FColor(30, 40, 50));

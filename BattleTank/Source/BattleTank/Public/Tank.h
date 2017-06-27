@@ -34,6 +34,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	int32 StartingHealth = 100.0;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health")
 	int32 CurrentHealth;
 };
