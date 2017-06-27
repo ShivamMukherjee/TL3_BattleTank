@@ -35,4 +35,9 @@ private:
 	void AimTowardsCrosshair();
 
 	bool GetCrosshairTraceHit(FHitResult& Hit) const;
+
+	void SetPawn(APawn* InPawn);
+
+	UFUNCTION()
+	void EnterSpectatorMode();
 };

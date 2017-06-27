@@ -3,6 +3,7 @@
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
+#include "Tank.h"
 
 
 void ATankPlayerController::BeginPlay()
@@ -57,4 +58,31 @@ bool ATankPlayerController::GetCrosshairTraceHit(FHitResult& Hit) const
 
 	// Draws a red line for debugging purposes
 	//DrawDebugLine(GetWorld(), HitResult.TraceStart, HitResult.TraceEnd, FColor(30, 40, 50));
+}
+
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		ATank* PossessedTank = Cast<ATank>(InPawn);
+
+		if (!ensure(PossessedTank))
+		{
+			return;
+		}
+		// subscribe to Tank's Death event
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::EnterSpectatorMode);
+	}
+}
+
+
+void ATankPlayerController::EnterSpectatorMode()
+{
+	if (this->GetPawn())
+	{
+		this->StartSpectatingOnly();
+	}
 }

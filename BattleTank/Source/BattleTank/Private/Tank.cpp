@@ -12,11 +12,24 @@ ATank::ATank()
 }
 
 
-float ATank::TakeDamage(float DamageAmount, FDamageEvent const& DamagaEvent, AController* EventInstigator, AActor* DamageCauser)
+void ATank::BeginPlay()
 {
-	float DamageToApply = FMath::Clamp<float>(DamageAmount, 0, this->CurrentHealth);
+	Super::BeginPlay();
+	this->CurrentHealth = this->StartingHealth;
+}
 
-	UE_LOG(BTInfoLog, Warning, TEXT("DamageAmount: %f, Damage Applied: %f"), DamageAmount, DamageToApply);
 
-	return DamageToApply;
+float ATank::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	DamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageAmount = FMath::Clamp<int32>(FMath::RoundToInt(DamageAmount), 0, this->CurrentHealth);
+
+	this->CurrentHealth -= DamageAmount;
+
+	if (this->CurrentHealth <= 0)
+	{
+		this->OnDeath.Broadcast();
+	}
+
+	return DamageAmount;
 }

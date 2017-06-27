@@ -5,12 +5,13 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-class UTankBarrel;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
 /**
  * Represents the Tank in the game
  */
-UCLASS()
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API ATank : public APawn
 {
 	GENERATED_BODY()
@@ -19,13 +20,20 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
+	virtual void BeginPlay() override;
+
 	// Called by Engine when actor takes damage
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamagaEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintPure, Category = "Health")
+	FORCEINLINE float GetHealthPercent() const { return static_cast<float>(this->CurrentHealth) / this->StartingHealth; }
+
+	FTankDelegate OnDeath;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
-	float StartingHealth = 100.0;
+	int32 StartingHealth = 100.0;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	float CurrentHealth = StartingHealth;
+	int32 CurrentHealth;
 };

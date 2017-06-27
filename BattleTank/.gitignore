@@ -11,7 +11,7 @@
 *.obj
 
 # Precompiled Headers
-*/ipch/*
+ipch/*
 *.gch
 *.pch
 *.ipch
