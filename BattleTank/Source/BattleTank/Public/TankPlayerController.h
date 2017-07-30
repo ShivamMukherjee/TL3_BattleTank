@@ -18,6 +18,10 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Game Over Options")
+	void EnterSpectatorMode();
+	virtual void EnterSpectatorMode_Implementation();
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimingComponentReference);
@@ -37,7 +41,4 @@ private:
 	bool GetCrosshairTraceHit(FHitResult& Hit) const;
 
 	void SetPawn(APawn* InPawn);
-
-	UFUNCTION()
-	void EnterSpectatorMode();
 };

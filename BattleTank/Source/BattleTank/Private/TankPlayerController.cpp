@@ -79,7 +79,7 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 }
 
 
-void ATankPlayerController::EnterSpectatorMode()
+void ATankPlayerController::EnterSpectatorMode_Implementation()
 {
 	if (this->GetPawn())
 	{
