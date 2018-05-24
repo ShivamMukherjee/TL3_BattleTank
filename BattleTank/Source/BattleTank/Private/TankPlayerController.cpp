@@ -15,10 +15,6 @@ void ATankPlayerController::BeginPlay()
 	{
 		FoundAimingComponent(AimingComponent);
 	}
-	else
-	{
-		return;
-	}
 }
 
 

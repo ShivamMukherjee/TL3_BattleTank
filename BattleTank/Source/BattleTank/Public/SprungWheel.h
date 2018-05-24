@@ -41,6 +41,14 @@ private:
 	class USphereComponent* Axle;
 
 	float ForceMagnitudeThisFrame;
+
+	void InitStringConstraint();
+
+	void InitAxleToWheelConstraint();
+
+	void InitWheel();
+
+	void InitAxle();
 	
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

@@ -16,8 +16,25 @@ ASprungWheel::ASprungWheel()
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostPhysics;
 	
 	SpringConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName{TEXT("Spring")});
-	SetRootComponent(SpringConstraint);
+	InitStringConstraint();
 
+	AxleToWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName{TEXT("AxleToWheelConstraint")});
+	InitAxleToWheelConstraint();
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName{TEXT("Wheel")});
+	InitWheel();
+
+	Axle = CreateDefaultSubobject<USphereComponent>(FName{TEXT("Axle")});
+	InitAxle();
+
+	SetRootComponent(SpringConstraint);
+	Axle->SetupAttachment(SpringConstraint);
+	AxleToWheelConstraint->SetupAttachment(Axle);
+	Wheel->SetupAttachment(Axle);
+}
+
+void ASprungWheel::InitStringConstraint()
+{
 	SpringConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0.F);
 	SpringConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0.F);
 	SpringConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 100.F);
@@ -29,19 +46,10 @@ ASprungWheel::ASprungWheel()
 	SpringConstraint->SetLinearPositionDrive(false, false, true);
 	SpringConstraint->SetLinearVelocityDrive(false, false, true);
 	SpringConstraint->SetLinearDriveParams(500.F, 200.F, 0.F);
+}
 
-	Axle = CreateDefaultSubobject<USphereComponent>(FName{TEXT("Axle")});
-	Axle->SetupAttachment(SpringConstraint);
-	Axle->SetMobility(EComponentMobility::Movable);
-	Axle->SetSimulatePhysics(true);
-	Axle->SetMassOverrideInKg(NAME_None, 1000.F);
-
-	Axle->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	Axle->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
-	AxleToWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName{TEXT("AxleToWheelConstraint")});	
-	AxleToWheelConstraint->SetupAttachment(Axle);
-	
+void ASprungWheel::InitAxleToWheelConstraint()
+{
 	AxleToWheelConstraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Locked, 0.F);
 	AxleToWheelConstraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Locked, 0.F);
 	AxleToWheelConstraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Locked, 0.F);
@@ -49,12 +57,23 @@ ASprungWheel::ASprungWheel()
 	AxleToWheelConstraint->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0.F);
 	AxleToWheelConstraint->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Free, 0.F);
 	AxleToWheelConstraint->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.F);
-	
-	Wheel = CreateDefaultSubobject<USphereComponent>(FName{TEXT("Wheel")});
-	Wheel->SetupAttachment(Axle);
+}
+
+void ASprungWheel::InitWheel()
+{
 	Wheel->SetMobility(EComponentMobility::Movable);
 	Wheel->SetSimulatePhysics(true);
 	Wheel->SetMassOverrideInKg(NAME_None, 1000.F);
+}
+
+void ASprungWheel::InitAxle()
+{
+	Axle->SetMobility(EComponentMobility::Movable);
+	Axle->SetSimulatePhysics(true);
+	Axle->SetMassOverrideInKg(NAME_None, 1000.F);
+
+	Axle->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	Axle->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 // Called when the game starts or when spawned
@@ -62,10 +81,13 @@ void ASprungWheel::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Wheel->SetNotifyRigidBodyCollision(true);
-	Wheel->OnComponentHit.AddDynamic(this, &ASprungWheel::OnHit);
+	if (SpringConstraint && AxleToWheelConstraint && Wheel && Axle)
+	{
+		Wheel->SetNotifyRigidBodyCollision(true);
+		Wheel->OnComponentHit.AddDynamic(this, &ASprungWheel::OnHit);
 
-	SetupSpringConstraint();
+		SetupSpringConstraint();
+	}
 }
 
 void ASprungWheel::SetupSpringConstraint()
