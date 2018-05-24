@@ -5,14 +5,15 @@
 #include "TankAIController.h"
 #include "Tank.h"
 
+#include "Engine/World.h"
 
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	this->AimingComponent = this->GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 
-	if (!ensure(this->AimingComponent))
+	if (!(AimingComponent))
 	{
 		return;
 	}
@@ -21,16 +22,21 @@ void ATankAIController::BeginPlay()
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	APawn* PlayerTank = this->GetWorld()->GetFirstPlayerController()->GetPawn();
+	APawn* PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if (!ensure(PlayerTank && this->GetPawn()))
+	if (!(PlayerTank && GetPawn()))
 	{
 		return;
 	}
 
-	this->MoveToActor(PlayerTank, this->AcceptanceRadius);
-	this->AimingComponent->AimAt(PlayerTank->GetActorLocation());
-	this->AimingComponent->Fire();
+	MoveToActor(PlayerTank, AcceptanceRadius);
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+	
+	
+	if (AimingComponent->GetFiringState() == EFiringState::Locked)
+	{
+		AimingComponent->Fire();
+	}
 }
 
 
@@ -42,7 +48,7 @@ void ATankAIController::SetPawn(APawn* InPawn)
 	{
 		ATank* PossessedTank = Cast<ATank>(InPawn);
 
-		if (!ensure(PossessedTank))
+		if (!PossessedTank)
 		{
 			return;
 		}
@@ -54,8 +60,8 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::Disengage()
 {
-	if (this->GetPawn())
+	if (GetPawn())
 	{
-		this->GetPawn()->DetachFromControllerPendingDestroy();
+		GetPawn()->DetachFromControllerPendingDestroy();
 	}
 }

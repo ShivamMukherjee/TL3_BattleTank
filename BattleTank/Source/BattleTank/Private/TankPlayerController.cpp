@@ -9,11 +9,11 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	this->AimingComponent = this->GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 
-	if (ensure(this->AimingComponent))
+	if ((AimingComponent))
 	{
-		FoundAimingComponent(this->AimingComponent);
+		FoundAimingComponent(AimingComponent);
 	}
 	else
 	{
@@ -25,13 +25,13 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	this->AimTowardsCrosshair();
+	AimTowardsCrosshair();
 }
 
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!this->GetPawn())
+	if (!GetPawn())
 	{
 		return;
 	}
@@ -40,8 +40,8 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 	if (GetCrosshairTraceHit(OutHit))
 	{
-		this->AimingComponent->AimAt(OutHit.ImpactPoint);
-		this->AimingComponent->SetHitResult(OutHit);
+		AimingComponent->AimAt(OutHit.ImpactPoint);
+		AimingComponent->SetHitResult(OutHit);
 	}
 }
 
@@ -69,7 +69,7 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 	{
 		ATank* PossessedTank = Cast<ATank>(InPawn);
 
-		if (!ensure(PossessedTank))
+		if (!(PossessedTank))
 		{
 			return;
 		}
@@ -81,8 +81,8 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 
 void ATankPlayerController::EnterSpectatorMode_Implementation()
 {
-	if (this->GetPawn())
+	if (GetPawn())
 	{
-		this->StartSpectatingOnly();
+		StartSpectatingOnly();
 	}
 }

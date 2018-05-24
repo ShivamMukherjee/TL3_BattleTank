@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "Engine.h"
+#include "CoreMinimal.h"
 
 
-DECLARE_LOG_CATEGORY_EXTERN(BTInfoLog, Log, All);
+
+DECLARE_LOG_CATEGORY_EXTERN(TL3InfoLog, Log, All)

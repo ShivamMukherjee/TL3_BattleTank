@@ -17,20 +17,20 @@ void ATank::BeginPlay()
 	// THE MOST IMPORTANT LINE IN THE ENTIRE GAME
 	Super::BeginPlay();
 
-	this->CurrentHealth = this->StartingHealth;
+	CurrentHealth = StartingHealth;
 }
 
 
 float ATank::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	DamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	DamageAmount = FMath::Clamp<int32>(FMath::RoundToInt(DamageAmount), 0, this->CurrentHealth);
+	DamageAmount = FMath::Clamp<int32>(FMath::RoundToInt(DamageAmount), 0, CurrentHealth);
 
-	this->CurrentHealth -= DamageAmount;
+	CurrentHealth -= DamageAmount;
 
-	if (this->CurrentHealth <= 0)
+	if (CurrentHealth <= 0)
 	{
-		this->OnDeath.Broadcast();
+		OnDeath.Broadcast();
 	}
 
 	return DamageAmount;

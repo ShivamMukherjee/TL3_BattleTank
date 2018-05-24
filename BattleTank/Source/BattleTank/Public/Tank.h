@@ -26,7 +26,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintPure, Category = "Health")
-	FORCEINLINE float GetHealthPercent() const { return static_cast<float>(this->CurrentHealth) / this->StartingHealth; }
+	FORCEINLINE float GetHealthPercent() const { return static_cast<float>(CurrentHealth) / StartingHealth; }
 
 	FTankDelegate OnDeath;
 

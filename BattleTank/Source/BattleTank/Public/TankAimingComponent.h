@@ -41,12 +41,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
-	FORCEINLINE void SetHitResult(FHitResult Hit) { this->HitResult = Hit; }
+	FORCEINLINE void SetHitResult(FHitResult Hit) { HitResult = Hit; }
 
-	FORCEINLINE EFiringState GetFiringState() const { return this->FiringState; }
+	FORCEINLINE EFiringState GetFiringState() const { return FiringState; }
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	FORCEINLINE int32 GetRoundsLeft() const { return this->RoundsLeft; }
+	FORCEINLINE int32 GetRoundsLeft() const { return RoundsLeft; }
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")

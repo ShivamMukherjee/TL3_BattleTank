@@ -2,7 +2,8 @@
 
 #include "BattleTank.h"
 
+#include "Modules/ModuleManager.h"
+
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, BattleTank, "BattleTank" );
 
-
-DEFINE_LOG_CATEGORY(BTInfoLog);
+DEFINE_LOG_CATEGORY(TL3InfoLog);
